@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  isaac-floor-database:
+    image: mysql
+    networks:
+      - isaac-floor
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: isaac-floor
+    volumes:
+      - ./sql-scripts:/docker-entrypoint-initdb.d
+
+  isaac-floor-myadmin:
+    image: phpmyadmin/phpmyadmin
+    networks:
+      - isaac-floor
+    ports:
+      - 8081:80
+    environment:
+      PMA_HOST: isaac-floor-database
+    depends_on:
+      - isaac-floor-database
+networks:
+  isaac-floor:
